@@ -1,2 +1,2 @@
 # Nwitter
-Cloning (mini0)Twitter with React and Frirebase
+Cloning (mini)Twitter with React and Frirebase
