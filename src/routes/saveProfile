@@ -1,0 +1,26 @@
+const getMyNweets = async () => {
+  const [nweets, setNweets] = useState([]);
+  const dbNweets = await dbService
+    .collection('nweets')
+    .where('creatorId', '==', userObj.uid)
+    .orderBy('createAt', 'asc')
+    .get();
+  dbNweets.docs.forEach((doc) => {
+    const nweetObject = { id: doc.id, ...doc.data() };
+    setNweets((prev) => [nweetObject, ...prev]);
+  });
+};
+
+useEffect(() => {
+  getMyNweets();
+}, []);
+
+
+{nweets &&
+  nweets.map((nweet, index) => (
+    <Nweet
+      key={index}
+      nweetObj={nweet}
+      isOwer={nweet.creatorId === userObj.uid}
+    />
+  ))}
