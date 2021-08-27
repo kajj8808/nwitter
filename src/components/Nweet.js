@@ -1,8 +1,8 @@
 import { dbService, storageService } from 'fbase';
 import { useState } from 'react';
-import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Link } from 'react-router-dom';
+import styled from 'styled-components';
 
 import {
   faTrash,
@@ -17,9 +17,7 @@ const NweetContainer = styled.div`
   padding: 12px;
   border: 1px solid #333333;
   gap: 13px;
-  &:last-child {
-    border-bottom: 0px;
-  }
+  border-top: 0px;
 `;
 
 const AttachmentBox = styled.img`
@@ -48,6 +46,7 @@ const EditBtns = styled.div`
   background-color: black;
   box-shadow: white 0px 1px 3px 1px;
   border-radius: 8px;
+  z-index: 2;
 `;
 
 const TextSpan = styled.span`

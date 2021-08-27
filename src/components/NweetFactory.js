@@ -31,9 +31,9 @@ const Profile = styled.div`
 const Factory = styled.div`
   display: flex;
   gap: 12px;
-  padding: 10px;
   border: 1px solid #333333;
-  border-bottom: 0px;
+  padding: 15px;
+
 `;
 
 const ImagePreview = styled.img`
