@@ -21,8 +21,8 @@ function App() {
     authService.onAuthStateChanged((user) => {
       if (user) {
         setUserObject({
-          uid: user.id,
-          displayName: user.displayName,
+          uid: user.uid,
+          displayName: user.displayName ? user.displayName : user.email.split('@')[0],
           updateProfile: (args) => user.updateProfile(args),
         });
       } else {

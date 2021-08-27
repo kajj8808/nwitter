@@ -1,11 +1,36 @@
 import { authService } from 'fbase';
 import { useState } from 'react';
+import styled from 'styled-components';
+
+const FormContainer = styled.form`
+  display: flex;
+  flex-direction: column;
+  width: 350px;
+  gap: 10px;
+`;
+
+const InputBox = styled.input`
+  background-color: ${(props) => (props.inputType ? '#ff7979' : 'white')};
+  border-radius: 30px;
+  color: ${(props) => (props.inputType ? '#ffff' : 'black')};
+  text-align: ${(props) => (props.inputType ? 'center' : '')};
+  &:hover {
+    background-color: ${(props) =>
+      props.inputType ? 'rgba(255,121,121,0.9)' : 'white'};
+  }
+  padding: 10px;
+`;
+
+const ToggleBtn = styled.div`
+  text-align: center;
+  text-decoration: underline;
+`;
 
 const AuthForm = () => {
   /* 쓰는 state 들  */
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [newAccount, setNewAccount] = useState(true);
+  const [newAccount, setNewAccount] = useState(false);
   const [error, setError] = useState('');
 
   //input 입력을위해서.
@@ -36,9 +61,9 @@ const AuthForm = () => {
   const toggleAccount = () => setNewAccount((prev) => !prev);
 
   return (
-    <>
-      <form onSubmit={onSubmit}>
-        <input
+    <div>
+      <FormContainer onSubmit={onSubmit}>
+        <InputBox
           name="email"
           type="email"
           placeholder="Eamil"
@@ -46,7 +71,7 @@ const AuthForm = () => {
           value={email}
           onChange={onChange}
         />
-        <input
+        <InputBox
           name="password"
           type="password"
           placeholder="Password"
@@ -54,14 +79,18 @@ const AuthForm = () => {
           value={password}
           onChange={onChange}
         />
-        <input type="submit" value={newAccount ? 'Create Account' : 'Log In'} />
+        <InputBox
+          type="submit"
+          value={newAccount ? 'Create Account' : 'Log In'}
+          inputType={'submit'}
+        />
         <br />
         {error}
-      </form>
-      <span onClick={toggleAccount}>
+      </FormContainer>
+      <ToggleBtn onClick={toggleAccount}>
         {newAccount ? 'Sign In' : 'Create Account'}
-      </span>
-    </>
+      </ToggleBtn>
+    </div>
   );
 };
 

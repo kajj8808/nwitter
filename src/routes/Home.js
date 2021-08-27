@@ -2,6 +2,13 @@ import { useState, useEffect } from 'react';
 import { dbService } from 'fbase';
 import Nweet from 'components/Nweet';
 import NweetFactory from 'components/NweetFactory';
+import styled from 'styled-components';
+
+const NweetContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  color: #ffff;
+`;
 
 const Home = ({ userObj }) => {
   const [nweets, setNweets] = useState([]);
@@ -20,7 +27,7 @@ const Home = ({ userObj }) => {
   }, []);
 
   return (
-    <>
+    <NweetContainer>
       <NweetFactory userObj={userObj} />
       <div>
         {nweets.map((nweet) => (
@@ -31,7 +38,7 @@ const Home = ({ userObj }) => {
           />
         ))}
       </div>
-    </>
+    </NweetContainer>
   );
 };
 

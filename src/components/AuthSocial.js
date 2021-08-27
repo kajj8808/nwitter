@@ -1,6 +1,27 @@
 import { authService, firebaseInstance } from 'fbase';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faGoogle, faGithub } from '@fortawesome/free-brands-svg-icons';
+import styled from 'styled-components';
 
-const SocialContainer = () => {
+const SocialBtn = styled.button`
+  background-color: white;
+  border: none;
+  border-radius: 30px;
+  padding: 12px;
+  &:hover{
+    background-color: rgba(255,255,255,0.9);
+  }
+`;
+
+const SocialContainer = styled.div`
+  width: 350px;
+  margin-top: 30px;
+  display: flex;
+  justify-content: space-between;
+  
+`;
+
+const Social = () => {
   const onSocialClick = async (event) => {
     const { name } = event.target;
     let provider;
@@ -12,15 +33,15 @@ const SocialContainer = () => {
     await authService.signInWithPopup(provider);
   };
   return (
-    <div>
-      <button onClick={onSocialClick} name="google">
-        Continue with Google{' '}
-      </button>
-      <button onClick={onSocialClick} name="github">
-        Continue with Github{' '}
-      </button>
-    </div>
+    <SocialContainer>
+      <SocialBtn onClick={onSocialClick} name="google">
+        Continue with Google <FontAwesomeIcon icon={faGoogle} />
+      </SocialBtn>
+      <SocialBtn onClick={onSocialClick} name="github">
+        Continue with Github <FontAwesomeIcon icon={faGithub} />
+      </SocialBtn>
+    </SocialContainer>
   );
 };
 
-export default SocialContainer;
+export default Social;

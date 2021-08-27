@@ -1,24 +1,147 @@
 import { dbService, storageService } from 'fbase';
 import { useState } from 'react';
 import styled from 'styled-components';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Link } from 'react-router-dom';
+
+import {
+  faTrash,
+  faPencilAlt,
+  faEllipsisH,
+} from '@fortawesome/free-solid-svg-icons';
+
+const fontSize = 18;
 
 const NweetContainer = styled.div`
-  padding: 15px;
+  display: flex;
+  padding: 12px;
+  border: 1px solid #333333;
+  gap: 13px;
+  &:last-child {
+    border-bottom: 0px;
+  }
 `;
 
-const AttachmentBox = styled.div`
+const AttachmentBox = styled.img`
   width: 505px;
   height: 285px;
-  background: url(${(props) => props.bcImage});
-  background-size: cover;
-  background-position: center top;
   border-radius: 13px;
+  object-fit: cover;
+  object-position: center top;
+  margin-top: 10px;
+`;
+
+const NweetBox = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+`;
+
+const EditBtns = styled.div`
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  gap: 5px;
+  right: 0;
+  top: 0px;
+  background-color: black;
+  box-shadow: white 0px 1px 3px 1px;
+  border-radius: 8px;
+`;
+
+const TextSpan = styled.span`
+  white-space: normal;
+  word-break: break-all;
+  font-size: ${fontSize}px;
+`;
+
+const Profile = styled.div`
+  width: 56px;
+  height: 50px;
+  border-radius: 50%;
+  background-color: #ff7979;
 `;
 
 const Header = styled.div`
-  width: 350px;
+  width: 505px;
+  position: relative;
+`;
+
+const Description = styled.div`
+  /* overflow 를 ... 으로 하기위해. */
+  width: 430px;
   display: flex;
   gap: 5px;
+`;
+
+const Main = styled.div`
+  position: relative;
+  width: 505px;
+`;
+
+const CreatorUser = styled.h2`
+  font-weight: 600;
+`;
+
+const LightlyText = styled.h4`
+  color: rgba(255, 255, 255, 0.5);
+`;
+
+const EditBtn = styled.button`
+  position: absolute;
+  right: 0;
+  top: 0;
+  background-color: black;
+  border: none;
+  color: #ffff;
+  border-radius: 50%;
+  &:hover {
+    background-color: rgba(255, 121, 121, 0.1);
+    color: #fa7b79;
+  }
+`;
+
+const EditSpan = styled.span`
+  text-align: center;
+  writing-mode: tb-rl;
+  font-size: 50px;
+  font-weight: 600;
+`;
+
+const EditForm = styled.form`
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+`;
+const UpdateBtn = styled.input`
+  background-color: #ff7979;
+  padding: 10px;
+  border-radius: 30px;
+  text-align: center;
+`;
+
+const CloseBtn = styled.button`
+  background-color: #ff7979;
+  padding: 10px;
+  border: none;
+  color: #ffff;
+  border-radius: 30px;
+`;
+
+const EditInput = styled.input`
+  border: 4px dotted #bcbcbc;
+  padding: 10px;
+`;
+
+const NweetEditBtn = styled.button`
+  color: #ffff;
+  background-color: black;
+  border: none;
+  display: flex;
+  gap: 10px;
+  padding: 10px;
+  border-radius: 30px;
 `;
 
 const Nweet = ({ nweetObj, isOwer }) => {
@@ -27,7 +150,12 @@ const Nweet = ({ nweetObj, isOwer }) => {
   /* 새로운 nweet(수정) obj.text 를 가져와서 기존 트윗이 보이도록 초기값. */
   const [newNweet, setNewNweet] = useState(nweetObj.text);
 
-  const toggleEditing = () => setEditing((prev) => !prev);
+  const [editToggle, setEditToggle] = useState(false);
+
+  const toggleEditing = () => {
+    setEditing((prev) => !prev);
+    setEditToggle(false);
+  };
 
   const onDeleteClick = async () => {
     const ok = window.confirm('삭제하시겠습니까?');
@@ -48,6 +176,10 @@ const Nweet = ({ nweetObj, isOwer }) => {
   const onSubmit = async (event) => {
     //event.preventDefault();
     await dbService.doc(`nweets/${nweetObj.id}`).update({ text: newNweet });
+  };
+
+  const onEditBtn = () => {
+    setEditToggle((prev) => !prev);
   };
 
   const getTime = (createdAt) => {
@@ -80,30 +212,60 @@ const Nweet = ({ nweetObj, isOwer }) => {
   return (
     <div key={nweetObj.id}>
       {editing ? (
-        <>
-          <form onSubmit={onSubmit}>
-            <input onChange={onChange} value={newNweet} required />
-            <input type="submit" value="Update Nweet" />
-          </form>
-          <button onClick={toggleEditing}>Cancel</button>
-        </>
-      ) : (
         <NweetContainer>
-          <Header>
-            <h4>{nweetObj.text}</h4>
-            <h5>· {getTime(nweetObj.createAt)}</h5>
-          </Header>
-
-          {nweetObj.attachmentUrl && (
-            <AttachmentBox bcImage={nweetObj.attachmentUrl}></AttachmentBox>
-          )}
-          {isOwer && (
-            <>
-              <button onClick={onDeleteClick}>Delete Nweet</button>
-              <button onClick={toggleEditing}>Update Nweet</button>
-            </>
-          )}
+          <EditSpan>EDIT</EditSpan>
+          <NweetBox>
+            <EditForm onSubmit={onSubmit}>
+              <EditInput onChange={onChange} value={newNweet} required />
+              {nweetObj.attachmentUrl && (
+                <AttachmentBox src={nweetObj.attachmentUrl}></AttachmentBox>
+              )}
+              <UpdateBtn type="submit" value="Update Nweet" />
+            </EditForm>
+            <CloseBtn onClick={toggleEditing}>Cancel</CloseBtn>
+          </NweetBox>
         </NweetContainer>
+      ) : (
+        <>
+          <NweetContainer>
+            <Profile />
+            <NweetBox>
+              <Header>
+                <Description>
+                  <CreatorUser>{nweetObj.creatorName}</CreatorUser>
+                  <LightlyText>@{nweetObj.creatorId}</LightlyText>
+                  <LightlyText>·</LightlyText>
+                  <LightlyText>{getTime(nweetObj.createAt)}</LightlyText>
+                </Description>
+                {isOwer && (
+                  <EditBtn onClick={onEditBtn}>
+                    <FontAwesomeIcon icon={faEllipsisH} />
+                  </EditBtn>
+                )}
+              </Header>
+              <Main>
+                <TextSpan>{nweetObj.text}</TextSpan>
+                {isOwer && editToggle && (
+                  <EditBtns>
+                    <NweetEditBtn onClick={onDeleteClick}>
+                      <FontAwesomeIcon icon={faTrash} />
+                      <span>Delete Nweet</span>
+                    </NweetEditBtn>
+                    <NweetEditBtn onClick={toggleEditing}>
+                      <FontAwesomeIcon icon={faPencilAlt} />
+                      <span>Update Nweet</span>
+                    </NweetEditBtn>
+                  </EditBtns>
+                )}
+              </Main>
+              {nweetObj.attachmentUrl && (
+                <Link>
+                  <AttachmentBox src={nweetObj.attachmentUrl}></AttachmentBox>
+                </Link>
+              )}
+            </NweetBox>
+          </NweetContainer>
+        </>
       )}
     </div>
   );
