@@ -1,14 +1,14 @@
-import { dbService, storageService } from 'fbase';
-import { useState } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Link } from 'react-router-dom';
-import styled from 'styled-components';
+import { dbService, storageService } from "fbase";
+import { useState } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Link } from "react-router-dom";
+import styled from "styled-components";
 
 import {
   faTrash,
   faPencilAlt,
   faEllipsisH,
-} from '@fortawesome/free-solid-svg-icons';
+} from "@fortawesome/free-solid-svg-icons";
 
 const fontSize = 18;
 
@@ -59,7 +59,7 @@ const Profile = styled.div`
   width: 56px;
   height: 50px;
   border-radius: 50%;
-  background-color: #ff7979;
+  background-color: #3ea6ff;
 `;
 
 const Header = styled.div`
@@ -114,14 +114,14 @@ const EditForm = styled.form`
   gap: 5px;
 `;
 const UpdateBtn = styled.input`
-  background-color: #ff7979;
+  background-color: #3ea6ff;
   padding: 10px;
   border-radius: 30px;
   text-align: center;
 `;
 
 const CloseBtn = styled.button`
-  background-color: #ff7979;
+  background-color: #3ea6ff;
   padding: 10px;
   border: none;
   color: #ffff;
@@ -157,11 +157,11 @@ const Nweet = ({ nweetObj, isOwer }) => {
   };
 
   const onDeleteClick = async () => {
-    const ok = window.confirm('삭제하시겠습니까?');
+    const ok = window.confirm("삭제하시겠습니까?");
     if (ok) {
       /* docmnet id 값을 찾아서 삭제합니다. */
       await dbService.doc(`nweets/${nweetObj.id}`).delete();
-      if (nweetObj.attchmentUrl !== '') {
+      if (nweetObj.attchmentUrl !== "") {
         await storageService.refFromURL(nweetObj.attchmentUrl).delete();
       }
     }
@@ -184,7 +184,7 @@ const Nweet = ({ nweetObj, isOwer }) => {
   const getTime = (createdAt) => {
     const nowTime = new Date();
     const createdTime = new Date(createdAt);
-    let result = '';
+    let result = "";
     // 만든날짜 계산
     if (nowTime.getFullYear() !== createdTime.getFullYear()) {
       //년

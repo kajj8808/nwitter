@@ -1,10 +1,10 @@
 //Home.js 가 상위.
-import { useState } from 'react';
-import { dbService, storageService } from 'fbase';
-import { v4 as uuidv4 } from 'uuid';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus, faTimes } from '@fortawesome/free-solid-svg-icons';
-import styled from 'styled-components';
+import { useState } from "react";
+import { dbService, storageService } from "fbase";
+import { v4 as uuidv4 } from "uuid";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPlus, faTimes } from "@fortawesome/free-solid-svg-icons";
+import styled from "styled-components";
 
 const FormContainer = styled.form`
   width: 505px;
@@ -13,7 +13,7 @@ const FormContainer = styled.form`
 `;
 
 const NweetSubmitBtn = styled.input`
-  background-color: #ff7979;
+  background-color: #3ea6ff;
   padding: 10px;
   border-radius: 30px;
   &:hover {
@@ -25,7 +25,7 @@ const Profile = styled.div`
   width: 50px;
   height: 50px;
   border-radius: 50%;
-  background-color: #ff7979;
+  background-color: #3ea6ff;
 `;
 
 const Factory = styled.div`
@@ -33,7 +33,6 @@ const Factory = styled.div`
   gap: 12px;
   border: 1px solid #333333;
   padding: 15px;
-
 `;
 
 const ImagePreview = styled.img`
@@ -76,7 +75,7 @@ const ImageCloseBtn = styled.button`
 const AttachLabel = styled.label`
   display: flex;
   gap: 3px;
-  color : #ff7979;
+  color: #3ea6ff;
 `;
 
 const ImageInput = styled.input`
@@ -86,20 +85,20 @@ const ImageInput = styled.input`
 
 const NweetFactory = ({ userObj }) => {
   /* 게시글 */
-  const [nweet, setNweet] = useState('');
+  const [nweet, setNweet] = useState("");
   /* (첨부파일) image */
-  const [attachment, setAttachment] = useState('');
+  const [attachment, setAttachment] = useState("");
   const onSubmit = async (event) => {
     event.preventDefault();
-    if (nweet === '') {
+    if (nweet === "") {
       return;
     }
-    let attachmentUrl = '';
-    if (attachment !== '') {
+    let attachmentUrl = "";
+    if (attachment !== "") {
       const attachmentRef = storageService
         .ref()
         .child(`${userObj.uid}/${uuidv4()}`);
-      const response = await attachmentRef.putString(attachment, 'data_url');
+      const response = await attachmentRef.putString(attachment, "data_url");
       attachmentUrl = await response.ref.getDownloadURL();
     }
 
@@ -111,10 +110,10 @@ const NweetFactory = ({ userObj }) => {
       creatorName: userObj.displayName,
       attachmentUrl,
     };
-    await dbService.collection('nweets').add(nweetObj);
+    await dbService.collection("nweets").add(nweetObj);
 
-    setNweet('');
-    setAttachment('');
+    setNweet("");
+    setAttachment("");
   };
 
   const onChange = (event) => {
@@ -146,7 +145,7 @@ const NweetFactory = ({ userObj }) => {
       setNweets((prev) => [nweetObject, ...prev]);
     });
   }; */
-  const onClaerAttachment = () => setAttachment('');
+  const onClaerAttachment = () => setAttachment("");
   return (
     <Factory>
       <Profile></Profile>
